@@ -30,6 +30,9 @@ notify      = "6"
 regex       = "1"
 which       = "6"
 
+[build-dependencies]
+tauri-build = "2.0"
+
 [profile.release]
 opt-level = "z"
 lto       = true
