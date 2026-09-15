@@ -17,8 +17,8 @@
     "test:watch":    "pnpm --filter @ai-orch/core exec vitest --watch",
     "lint":          "turbo run lint",
     "typecheck":     "turbo run typecheck",
-    "tauri":         "pnpm --filter @ai-orch/desktop tauri",
-    "tauri:build":   "pnpm --filter @ai-orch/desktop tauri build",
+    "tauri":         "tauri",
+    "tauri:build":   "tauri build",
     "clean":         "find . -name dist -type d -not -path '*/node_modules/*' | xargs rm -rf"
   },
   "devDependencies": {
