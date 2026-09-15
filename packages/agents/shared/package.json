@@ -1,0 +1,12 @@
+{
+  "name": "@ai-orch/agent-shared",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": { ".": "./dist/index.js" },
+  "scripts": { "build": "tsc", "dev": "tsc --watch" },
+  "dependencies": {
+    "@ai-orch/protocol": "workspace:*"
+  },
+  "devDependencies": { "typescript": "^5.4.0" }
+}

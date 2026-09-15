@@ -1,0 +1,16 @@
+{
+  "name": "@ai-orch/agent-gemini",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": { ".": "./dist/index.js" },
+  "scripts": { "build": "tsc", "dev": "tsc --watch" },
+  "dependencies": {
+    "@ai-orch/protocol":     "workspace:*",
+    "@ai-orch/agent-shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript":  "^5.4.0"
+  }
+}

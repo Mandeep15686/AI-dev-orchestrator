@@ -1,0 +1,33 @@
+{
+  "name": "ai-dev-orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "packages/agents/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev":           "turbo run dev",
+    "build":         "turbo run build",
+    "test":          "turbo run test",
+    "test:core":     "pnpm --filter @ai-orch/core test",
+    "test:security": "pnpm --filter @ai-orch/security test",
+    "test:watch":    "pnpm --filter @ai-orch/core exec vitest --watch",
+    "lint":          "turbo run lint",
+    "typecheck":     "turbo run typecheck",
+    "tauri":         "pnpm --filter @ai-orch/desktop tauri",
+    "tauri:build":   "pnpm --filter @ai-orch/desktop tauri build",
+    "clean":         "find . -name dist -type d -not -path '*/node_modules/*' | xargs rm -rf"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.0.0",
+    "turbo":           "^2.0.0",
+    "typescript":      "^5.4.0",
+    "vitest":          "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}

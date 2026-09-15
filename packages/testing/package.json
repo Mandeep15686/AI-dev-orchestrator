@@ -1,0 +1,8 @@
+{
+  "name": "@ai-orch/testing",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": { "build": "tsc", "dev": "tsc --watch" },
+  "devDependencies": { "typescript": "^5.4.0" }
+}

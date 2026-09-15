@@ -1,0 +1,137 @@
+/* apps/desktop/src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg:      #070B14;
+  --surface: #0D1424;
+  --panel:   #111827;
+  --border:  #1C2840;
+  --border2: #243355;
+  --blue:    #2563EB;
+  --cyan:    #06C8D8;
+  --violet:  #7C3AED;
+  --green:   #10B981;
+  --amber:   #F59E0B;
+  --red:     #EF4444;
+  --text:    #E2E8F0;
+  --muted:   #64748B;
+  --dim:     #334155;
+  --mono:    'JetBrains Mono', monospace;
+  --sans:    'Space Grotesk', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root { height: 100%; overflow: hidden; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Layout ─────────────────────────────────────────────── */
+.app-root {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Card ───────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+}
+
+/* ─── Buttons ────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .4rem .85rem;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, color .12s;
+  white-space: nowrap;
+}
+
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+}
+.btn-ghost:hover:not(:disabled) { background: rgba(255,255,255,.05); color: var(--text); }
+
+.btn-danger {
+  background: rgba(239,68,68,.1);
+  border-color: rgba(239,68,68,.4);
+  color: #fca5a5;
+}
+.btn-danger:hover:not(:disabled) { background: rgba(239,68,68,.2); }
+
+/* ─── Inputs ─────────────────────────────────────────────── */
+.code-input {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .4rem .7rem;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  outline: none;
+  transition: border-color .12s;
+}
+.code-input:focus { border-color: var(--blue); }
+.code-input::placeholder { color: var(--dim); }
+
+/* ─── Badges ─────────────────────────────────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: .05em;
+}
+.bd-blue   { background: rgba(37,99,235,.15);   color: #93c5fd; }
+.bd-green  { background: rgba(16,185,129,.15);  color: #6ee7b7; }
+.bd-amber  { background: rgba(245,158,11,.15);  color: #fcd34d; }
+.bd-violet { background: rgba(124,58,237,.15);  color: #c4b5fd; }
+.bd-red    { background: rgba(239,68,68,.15);   color: #fca5a5; }
+.bd-cyan   { background: rgba(6,200,216,.15);   color: #67e8f9; }
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border2); }
+
+/* ─── Selection ──────────────────────────────────────────── */
+::selection { background: rgba(37,99,235,.3); }

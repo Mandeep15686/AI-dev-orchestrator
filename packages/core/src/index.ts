@@ -1,0 +1,20 @@
+// packages/core/src/index.ts — complete barrel export
+export { OrchestratorCore }   from './OrchestratorCore.js';
+export type { OrchestratorConfig } from './OrchestratorCore.js';
+export { TaskPlanner }        from './TaskPlanner.js';
+export type { TaskDAG, DecompositionResult } from './TaskPlanner.js';
+export { AgentRouter }        from './AgentRouter.js';
+export type { AgentScore, RouterOptions } from './AgentRouter.js';
+export { ContextEngine }      from './ContextEngine.js';
+export { HandoffEngine }      from './HandoffEngine.js';
+export type { RawSessionOutput } from './HandoffEngine.js';
+export { AgentRunner }        from './AgentRunner.js';
+export type { RunResult }     from './AgentRunner.js';
+export { VerificationEngine } from './VerificationEngine.js';
+export { FailureRecovery }    from './FailureRecovery.js';
+export { DAGScheduler }       from './DAGScheduler.js';
+export type { TaskExecutor }  from './DAGScheduler.js';
+export { WorkflowEngine }     from './WorkflowEngine.js';
+export type { StepResult, WorkflowExecutionContext } from './WorkflowEngine.js';
+export { ProjectInitializer } from './ProjectInitializer.js';
+export { TypedEventBus, eventBus } from './EventBus.js';
