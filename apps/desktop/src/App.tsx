@@ -1,7 +1,7 @@
 // apps/desktop/src/App.tsx
 import { useEffect, useState } from 'react';
 import { tauriEvents }          from './lib/tauri';
-import { useEventStore, useWorkflowStore, useAgentStore, useProjectStore } from './store';
+import { useEventStore, useWorkflowStore, useProjectStore } from './store';
 
 import Sidebar            from './components/Sidebar';
 import PermissionDialog   from './components/PermissionDialog';

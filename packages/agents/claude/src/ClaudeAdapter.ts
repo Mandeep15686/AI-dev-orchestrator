@@ -6,7 +6,7 @@
 import { spawn, type ChildProcess } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { which } from 'which';
-import { BaseAgentAdapter } from '../../shared/src/AgentAdapter.js';
+import { BaseAgentAdapter } from '@ai-orch/agent-shared';
 import type {
   AgentCapabilities, AgentDetectionResult, AgentSession,
   AgentEvent, Task, ContextPackage, SessionOptions, StopReason,

@@ -10,7 +10,8 @@
     "test":  "vitest run"
   },
   "dependencies": {
-    "@ai-orch/protocol": "workspace:*"
+    "@ai-orch/protocol": "workspace:*",
+    "@ai-orch/storage": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.4.0",

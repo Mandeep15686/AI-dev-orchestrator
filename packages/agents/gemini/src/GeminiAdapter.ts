@@ -4,7 +4,7 @@
 // Best for: research, testing strategy, documentation
 // ═══════════════════════════════════════════════════════════════
 
-import { BaseAgentAdapter } from '../../shared/src/AgentAdapter.js';
+import { BaseAgentAdapter } from '@ai-orch/agent-shared';
 import type {
   AgentCapabilities, AgentDetectionResult, AgentSession,
   AgentEvent, Task, ContextPackage, SessionOptions, StopReason,

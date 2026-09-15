@@ -8,7 +8,7 @@ import type {
   AgentId, TaskType, RiskLevel, PermissionDecision,
   AgentPermissions,
 } from '@ai-orch/protocol';
-import type { Database } from '../../storage/src/Database.js';
+import type { Database } from '@ai-orch/storage';
 
 // Commands that are ALWAYS blocked — no override
 const HARDCODED_BLOCKED = new Set([

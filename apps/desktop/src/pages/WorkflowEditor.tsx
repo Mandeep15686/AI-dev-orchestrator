@@ -1,8 +1,8 @@
 // apps/desktop/src/pages/WorkflowEditor.tsx
 // Full visual workflow editor — requires: npm install reactflow
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useWorkflowStore } from '../store';
-import type { Workflow, WorkflowNode, WorkflowEdge } from '@ai-orch/protocol';
+import type { Workflow, WorkflowNode } from '@ai-orch/protocol';
 
 const AGENT_COLORS: Record<string, string> = {
   claude: '#7C3AED', codex: '#2563EB', cursor: '#06C8D8', gemini: '#10B981',

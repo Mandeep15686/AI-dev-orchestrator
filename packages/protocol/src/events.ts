@@ -5,7 +5,7 @@
 
 import type {
   AgentId, SessionId, TaskId, CheckpointId, WorkflowRunId,
-  StopReason, VerificationResult, HandoffSummary, RecoveryAction,
+  StopReason, VerificationResult, HandoffSummary,
   RiskLevel, PermissionDecision,
 } from './types.js';
 

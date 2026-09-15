@@ -7,8 +7,7 @@
   "exports": { ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" } },
   "scripts": {
     "build": "tsc",
-    "dev":   "tsc --watch",
-    "test":  "node --experimental-vm-modules node_modules/.bin/jest"
+    "dev":   "tsc --watch"
   },
   "devDependencies": {
     "typescript": "^5.4.0"

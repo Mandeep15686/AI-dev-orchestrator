@@ -6,9 +6,7 @@
 
 import { invoke } from '@tauri-apps/api/core';
 import { listen, type UnlistenFn } from '@tauri-apps/api/event';
-import type {
-  AgentId, AgentSession, ProjectMeta,
-} from '@ai-orch/protocol';
+import type { AgentId } from '@ai-orch/protocol';
 
 // ─── Git ──────────────────────────────────────────────────────
 export interface GitStatusResult {
