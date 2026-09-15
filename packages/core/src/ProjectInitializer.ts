@@ -79,8 +79,9 @@ export class ProjectInitializer {
     // Register in DB
     this.db.insertProject({
       id, name, path: projectPath,
-      language, gitRemote: meta.gitRemote ?? undefined,
+      language,
       settings: JSON.stringify(settings),
+      ...(meta.gitRemote === null ? {} : { gitRemote: meta.gitRemote }),
     });
 
     return meta;

@@ -90,7 +90,18 @@ export class OrchestratorCore {
     });
     this.activeWorkflowId = runId;
 
-    await this.db.insertTasks(tasks.map(t => ({ ...t, workflowRunId: runId })));
+    await this.db.insertTasks(tasks.map(({
+      id, name, type, description, dependencies, agentHint, priority,
+    }) => ({
+      id,
+      workflowRunId: runId,
+      name,
+      type,
+      description,
+      deps: dependencies,
+      agentHint,
+      priority,
+    })));
     await this.codegraph.init(project.path);
 
     const scheduler = new DAGScheduler(this.eventBus, this.git, project.path);
