@@ -33,12 +33,6 @@ pub struct ManagedProcess {
 #[derive(Default)]
 pub struct ProcessRegistry(pub Arc<Mutex<HashMap<String, ManagedProcess>>>);
 
-impl ProcessRegistry {
-    pub fn new() -> Self {
-        Self(Arc::new(Mutex::new(HashMap::new())))
-    }
-}
-
 #[command]
 pub async fn spawn_agent_process(
     app: AppHandle,
@@ -63,7 +57,7 @@ pub async fn spawn_agent_process(
         let sid  = opts.session_id.clone();
         std::thread::spawn(move || {
             use std::io::{BufRead, BufReader};
-            for line in BufReader::new(stdout).lines().flatten() {
+            for line in BufReader::new(stdout).lines().map_while(Result::ok) {
                 let _ = app2.emit("agent_output", serde_json::json!({
                     "session_id": sid,
                     "chunk": line,
@@ -79,7 +73,7 @@ pub async fn spawn_agent_process(
         let sid  = opts.session_id.clone();
         std::thread::spawn(move || {
             use std::io::{BufRead, BufReader};
-            for line in BufReader::new(stderr).lines().flatten() {
+            for line in BufReader::new(stderr).lines().map_while(Result::ok) {
                 let _ = app3.emit("agent_output", serde_json::json!({
                     "session_id": sid,
                     "chunk": line,

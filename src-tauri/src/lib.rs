@@ -1,5 +1,6 @@
 // src-tauri/src/lib.rs
 mod commands;
+#[allow(dead_code)] // Reserved for the Node orchestration sidecar integration.
 mod ipc;
 mod database;
 

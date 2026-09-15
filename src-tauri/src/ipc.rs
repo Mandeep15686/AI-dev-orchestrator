@@ -56,7 +56,7 @@ impl SidecarProcess {
             let app2 = app.clone();
             thread::spawn(move || {
                 let reader = BufReader::new(stdout);
-                for line in reader.lines().flatten() {
+                for line in reader.lines().map_while(Result::ok) {
                     if line.trim().is_empty() { continue; }
                     // Parse as JSON-RPC notification or response
                     if let Ok(val) = serde_json::from_str::<serde_json::Value>(&line) {
@@ -74,7 +74,7 @@ impl SidecarProcess {
         if let Some(stderr) = child.stderr.take() {
             thread::spawn(move || {
                 let reader = BufReader::new(stderr);
-                for line in reader.lines().flatten() {
+                for line in reader.lines().map_while(Result::ok) {
                     eprintln!("[sidecar stderr] {line}");
                 }
             });
