@@ -1,7 +1,7 @@
 // packages/core/src/__tests__/AgentAdapter.test.ts
 // Tests for the BaseAgentAdapter helpers shared by all adapters
 import { describe, it, expect } from 'vitest';
-import { BaseAgentAdapter }     from '../../agents/shared/src/AgentAdapter.js';
+import { BaseAgentAdapter }     from '@ai-orch/agent-shared';
 import type {
   AgentCapabilities, AgentDetectionResult,
   AgentSession, AgentEvent, Task, ContextPackage, SessionOptions, StopReason,

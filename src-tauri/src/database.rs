@@ -1,4 +1,4 @@
-use rusqlite::{Connection, params};
+use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 use std::{path::Path, sync::{Arc, Mutex}};
 use tauri::command;

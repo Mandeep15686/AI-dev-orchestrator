@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@ai-orch/agent-shared": "workspace:*",
+    "@ai-orch/git":          "workspace:*",
     "@ai-orch/security":     "workspace:*",
     "@vitest/coverage-v8": "^1.6.0",
     "typescript": "^5.4.0",

@@ -1,7 +1,7 @@
 // packages/core/src/__tests__/AgentRouter.test.ts
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AgentRouter } from '../AgentRouter.js';
-import type { AgentAdapter } from '../../agents/shared/src/AgentAdapter.js';
+import type { AgentAdapter } from '@ai-orch/agent-shared';
 import type { AgentCapabilities, AgentDetectionResult, Task } from '@ai-orch/protocol';
 
 // ─── Mock adapter factory ────────────────────────────────────

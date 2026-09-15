@@ -2,5 +2,4 @@
 pub mod git;
 pub mod process;
 pub mod keychain;
-pub mod database;
 pub mod fs;

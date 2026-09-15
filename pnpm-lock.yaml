@@ -166,6 +166,9 @@ importers:
       '@ai-orch/agent-shared':
         specifier: workspace:*
         version: link:../agents/shared
+      '@ai-orch/git':
+        specifier: workspace:*
+        version: link:../git
       '@ai-orch/security':
         specifier: workspace:*
         version: link:../security

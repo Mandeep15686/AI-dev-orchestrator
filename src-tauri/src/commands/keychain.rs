@@ -25,6 +25,6 @@ pub fn delete_credential(service: String, key: String) -> Result<(), String> {
 #[command]
 pub fn has_credential(service: String, key: String) -> bool {
     entry(&service, &key)
-        .and_then(|e| e.get_password().map(|_| ()).map_err(|e| keyring::Error::PlatformFailure(Box::new(e))))
+        .and_then(|e| e.get_password().map(|_| ()).map_err(|e| e.to_string()))
         .is_ok()
 }

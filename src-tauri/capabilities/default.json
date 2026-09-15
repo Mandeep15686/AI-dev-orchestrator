@@ -1,0 +1,12 @@
+{
+  "identifier": "default",
+  "description": "Default capability set",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:default",
+    "fs:default",
+    "process:default",
+    "notification:default"
+  ]
+}

@@ -34,7 +34,7 @@ export class GitEngine {
       execAsync('git status --porcelain', { cwd: projectPath }).then(r => r.stdout).catch(() => ''),
     ]);
 
-    const files = statusOut.trim().split('\n').filter(Boolean).map(line => ({
+    const files = statusOut.split('\n').filter(Boolean).map(line => ({
       status: this.parseStatus(line.slice(0, 2).trim()),
       path:   line.slice(3).trim(),
     }));
@@ -120,7 +120,8 @@ export class GitEngine {
   }
 
   private parseStatus(code: string): string {
-    if (code === '??' || code === 'A')  return 'added';
+    if (code === '??')                  return 'untracked';
+    if (code === 'A')                   return 'added';
     if (code === 'D')                   return 'deleted';
     if (code === 'R')                   return 'renamed';
     return 'modified';

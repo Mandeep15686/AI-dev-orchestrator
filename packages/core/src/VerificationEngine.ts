@@ -36,7 +36,9 @@ export class VerificationEngine {
     // Strict: + integration tests + security scan
     const build     = await this.runBuild(projectPath, lang, timeout);
     const lint      = await this.runLint(projectPath, lang, timeout);
-    const unitTests = await this.runUnitTests(projectPath, lang, timeout);
+    const unitTests = policy === 'fast'
+      ? { passed: 0, failed: 0, skipped: 0, duration: 0, errors: [], suites: [] }
+      : await this.runUnitTests(projectPath, lang, timeout);
     const intTests  = policy === 'strict'
       ? await this.runIntegrationTests(projectPath, lang, timeout)
       : null;
@@ -152,7 +154,7 @@ export class VerificationEngine {
     } catch (err: any) {
       return {
         passed:   false,
-        output:   (err.stdout ?? '' + err.stderr ?? '').slice(0, 8_000),
+        output:   ((err.stdout ?? '') + (err.stderr ?? '')).slice(0, 8_000),
         duration: Date.now() - start,
       };
     }

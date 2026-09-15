@@ -40,8 +40,9 @@ describe('VerificationEngine', () => {
   beforeEach(() => {
     engine = new VerificationEngine();
     vi.clearAllMocks();
-    // Default: no package.json, Cargo.toml, etc. → 'unknown' language
-    vi.mocked(readFile).mockRejectedValue(new Error('not found'));
+    vi.mocked(readFile).mockResolvedValue(
+      JSON.stringify({ devDependencies: { typescript: '^5.0.0' } }) as any,
+    );
   });
 
   describe('language detection', () => {
@@ -50,7 +51,7 @@ describe('VerificationEngine', () => {
         JSON.stringify({ devDependencies: { typescript: '^5.0.0' } }) as any,
       );
       // Just run a fast gate to trigger language detection
-      mockExec.mockImplementation(makeExecSuccess as any);
+      mockExec.mockImplementation(makeExecSuccess() as any);
       const result = await engine.runGate('fast', '/fake/project');
       expect(result.policy).toBe('fast');
     });

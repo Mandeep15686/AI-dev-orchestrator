@@ -1,7 +1,7 @@
 // packages/core/src/__tests__/orchestration.integration.test.ts
 // Full pipeline integration test — mocks agents but runs real subsystem logic
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { AgentAdapter } from '../../agents/shared/src/AgentAdapter.js';
+import type { AgentAdapter } from '@ai-orch/agent-shared';
 import type {
   AgentCapabilities, AgentDetectionResult, Task,
   ContextPackage, AgentSession, AgentEvent, StopReason,
@@ -49,7 +49,7 @@ describe('Orchestration pipeline (integration)', () => {
     const { AgentRouter }    = await import('../AgentRouter.js');
     const { AgentRunner }    = await import('../AgentRunner.js');
     const { TypedEventBus }  = await import('../EventBus.js');
-    const { PermissionManager } = await import('../../security/src/PermissionManager.js');
+    const { PermissionManager } = await import('@ai-orch/security');
 
     const mockDb: any = {
       getAgentMetrics:    vi.fn().mockResolvedValue(null),

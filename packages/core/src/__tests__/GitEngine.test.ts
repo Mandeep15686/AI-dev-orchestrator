@@ -12,7 +12,7 @@ vi.mock('node:fs/promises', () => ({
 }));
 
 import { exec } from 'node:child_process';
-import { GitEngine } from '../../git/src/GitEngine.js';
+import { GitEngine } from '@ai-orch/git';
 
 const mockExec = vi.mocked(exec);
 

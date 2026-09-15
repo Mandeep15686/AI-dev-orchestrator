@@ -128,7 +128,7 @@ export class TaskPlanner {
     };
 
     for (const id of dag.nodes.keys()) visit(id);
-    return result.reverse();
+    return result;
   }
 
   // ─── Pattern detectors ────────────────────────────────────────

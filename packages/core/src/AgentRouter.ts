@@ -71,13 +71,14 @@ export class AgentRouter {
     const languageMatch  = caps.languages.includes(language.toLowerCase()) ? 1.0 : 0.5;
     const latency        = 1 - this.normalize(metrics?.avg_duration_ms ?? 60_000, 0, 300_000);
 
-    const total =
+    const weightedTotal =
       taskTypeMatch   * 0.30 +
       availability    * 0.20 +
       quotaRemaining  * 0.15 +
       historicSuccess * 0.20 +
       languageMatch   * 0.10 +
       latency         * 0.05;
+    const total = available ? weightedTotal : 0;
 
     return {
       agentId: adapter.id,

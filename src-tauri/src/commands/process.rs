@@ -6,7 +6,6 @@ use std::{
     sync::{Arc, Mutex},
 };
 use tauri::{command, AppHandle, Emitter};
-use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SpawnOptions {

@@ -1,8 +1,7 @@
-use git2::{Repository, StatusOptions, DiffOptions, BranchType, ResetType};
+use git2::{Repository, StatusOptions, DiffOptions, ResetType};
 use serde::{Deserialize, Serialize};
 use tauri::command;
 use anyhow::{Context, Result};
-use std::path::Path;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct FileStatus {
@@ -59,14 +58,14 @@ fn _git_status(path: &str) -> Result<GitStatus> {
     for entry in statuses.iter() {
         let path_str = entry.path().unwrap_or("").to_string();
         let s = entry.status();
-        let status = if s.contains(git2::Status::WT_NEW) || s.contains(git2::Status::INDEX_NEW) {
+        let status = if s.contains(git2::Status::WT_NEW) {
+            "untracked"
+        } else if s.contains(git2::Status::INDEX_NEW) {
             "added"
         } else if s.contains(git2::Status::WT_DELETED) || s.contains(git2::Status::INDEX_DELETED) {
             "deleted"
         } else if s.contains(git2::Status::WT_RENAMED) || s.contains(git2::Status::INDEX_RENAMED) {
             "renamed"
-        } else if s.contains(git2::Status::WT_UNTRACKED) {
-            "untracked"
         } else {
             "modified"
         };

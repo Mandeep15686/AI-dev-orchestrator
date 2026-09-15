@@ -1,14 +1,12 @@
 // src-tauri/src/lib.rs
 mod commands;
 mod ipc;
-mod process;
-mod keychain;
 mod database;
 
 use tauri::Manager;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
+#[cfg_attr(any(target_os = "android", target_os = "ios"), tauri::mobile_entry_point)]
 pub fn run() {
     tracing_subscriber::registry()
         .with(
@@ -53,8 +51,8 @@ pub fn run() {
             commands::keychain::get_credential,
             commands::keychain::delete_credential,
             commands::keychain::has_credential,
-            commands::database::db_execute,
-            commands::database::db_query,
+            database::db_execute,
+            database::db_query,
             commands::fs::read_file,
             commands::fs::write_file,
             commands::fs::list_dir,

@@ -80,7 +80,7 @@ describe('ProjectInitializer', () => {
     it('writes decisions.md and task.md templates', async () => {
       await init.init('/tmp/p', { name: 'Test' });
       const calls = vi.mocked(fsPromises.writeFile).mock.calls;
-      const files  = calls.map(([path]) => String(path).split('/').pop());
+      const files  = calls.map(([path]) => String(path).split(/[\\/]/).pop());
       expect(files).toContain('decisions.md');
       expect(files).toContain('task.md');
     });
