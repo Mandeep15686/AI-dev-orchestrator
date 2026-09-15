@@ -130,7 +130,7 @@ export class PermissionManager {
   private isInAllowlist(agentId: AgentId, taskType: TaskType, cmd: string): boolean {
     const allowlist = this.defaultAllowlist(taskType);
     const cmdBase   = cmd.split(' ')[0]?.toLowerCase() ?? '';
-    return allowlist.some(allowed => cmdBase === allowed || cmd.startsWith(allowed + ' '));
+    return allowlist.some(allowed => cmdBase === allowed || cmd === allowed || cmd.startsWith(allowed + ' '));
   }
 
   private defaultAllowlist(taskType: TaskType): string[] {
