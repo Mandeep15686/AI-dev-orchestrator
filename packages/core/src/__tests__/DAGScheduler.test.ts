@@ -127,7 +127,7 @@ describe('DAGScheduler', () => {
       const executor = vi.fn().mockResolvedValue('success');
       await scheduler.execute(dag, executor);
       const taskStartedCalls = vi.mocked(mockBus.emit).mock.calls
-        .filter(([ev]) => ev === 'TASK_STARTED');
+        .filter((call: unknown[]) => call[0] === 'TASK_STARTED');
       expect(taskStartedCalls).toHaveLength(2);
     });
 

@@ -5,9 +5,9 @@
 
 import { EventEmitter } from 'node:events';
 import type { OrchestratorEvent, EventPayloadMap } from '@ai-orch/protocol';
-import type { Database } from '../storage/Database.js';
+import type { Database } from '@ai-orch/storage';
 
-type Handler<E extends OrchestratorEvent> = (payload: EventPayloadMap[E]) => void | Promise<void>;
+type Handler<E extends OrchestratorEvent> = (payload: EventPayloadMap[E]) => unknown;
 
 export class TypedEventBus {
   private ee              = new EventEmitter();
@@ -18,8 +18,8 @@ export class TypedEventBus {
     tauriEmitter?: (event: string, payload: unknown) => void;
     db?: Database;
   }) {
-    this.tauriEmitter = opts?.tauriEmitter;
-    this.db           = opts?.db;
+    if (opts?.tauriEmitter) this.tauriEmitter = opts.tauriEmitter;
+    if (opts?.db) this.db = opts.db;
     this.ee.setMaxListeners(50);
   }
 
@@ -82,7 +82,7 @@ export class TypedEventBus {
 
   private persistEvent(event: string, payload: unknown): void {
     if (!this.db) return;
-    this.db.insertEvent(event, payload).catch(err => {
+    this.db.insertEvent(event, payload).catch((err: unknown) => {
       console.error('[EventBus] DB persist error:', err);
     });
   }

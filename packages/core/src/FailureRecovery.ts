@@ -10,7 +10,7 @@ import type {
 } from '@ai-orch/protocol';
 import type { TypedEventBus }  from './EventBus.js';
 import type { AgentRouter }    from './AgentRouter.js';
-import type { Database }       from '../storage/Database.js';
+import type { Database }       from '@ai-orch/storage';
 
 interface RecoveryContext {
   task:          Task;
@@ -218,6 +218,8 @@ export class FailureRecovery {
     max:      number,
     message?: string,
   ): RecoveryAction {
-    return { strategy, attempt, maxAttempts: max, message };
+    return message === undefined
+      ? { strategy, attempt, maxAttempts: max }
+      : { strategy, attempt, maxAttempts: max, message };
   }
 }

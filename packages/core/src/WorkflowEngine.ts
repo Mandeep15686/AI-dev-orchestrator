@@ -10,7 +10,7 @@ import type {
   WorkflowNodeType, VerificationResult, Task,
 } from '@ai-orch/protocol';
 import type { TypedEventBus }  from './EventBus.js';
-import type { Database }       from '../storage/Database.js';
+import type { Database }       from '@ai-orch/storage';
 
 export interface StepResult {
   nodeId:    string;

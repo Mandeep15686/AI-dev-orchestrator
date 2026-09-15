@@ -8,10 +8,10 @@ import type {
   Task, AgentSession, AgentId, StopReason,
   ContextPackage, SessionOptions,
 } from '@ai-orch/protocol';
-import type { AgentAdapter } from '../agents/shared/src/AgentAdapter.js';
+import type { AgentAdapter } from '@ai-orch/agent-shared';
 import type { TypedEventBus } from './EventBus.js';
-import type { Database }      from '../storage/Database.js';
-import type { PermissionManager } from '../security/PermissionManager.js';
+import type { Database }      from '@ai-orch/storage';
+import type { PermissionManager } from '@ai-orch/security';
 
 export interface RunResult {
   session:     AgentSession;

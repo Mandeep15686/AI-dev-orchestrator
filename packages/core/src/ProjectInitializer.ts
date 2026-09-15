@@ -9,7 +9,7 @@ import { mkdir, writeFile, readFile, access } from 'node:fs/promises';
 import { join, basename }  from 'node:path';
 import { randomUUID }      from 'node:crypto';
 import type { ProjectMeta, ProjectSettings, VerificationPolicy } from '@ai-orch/protocol';
-import type { Database } from '../storage/Database.js';
+import type { Database } from '@ai-orch/storage';
 
 const DIR = '.ai-orchestrator';
 

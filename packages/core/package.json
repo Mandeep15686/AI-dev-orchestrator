@@ -19,12 +19,17 @@
   },
   "dependencies": {
     "@ai-orch/protocol": "workspace:*",
+    "@ai-orch/agent-shared": "workspace:*",
+    "@ai-orch/agent-claude": "workspace:*",
+    "@ai-orch/agent-codex": "workspace:*",
+    "@ai-orch/agent-gemini": "workspace:*",
+    "@ai-orch/codegraph": "workspace:*",
+    "@ai-orch/git": "workspace:*",
+    "@ai-orch/security": "workspace:*",
+    "@ai-orch/storage": "workspace:*",
     "eventemitter3": "^5.0.1"
   },
   "devDependencies": {
-    "@ai-orch/agent-shared": "workspace:*",
-    "@ai-orch/git":          "workspace:*",
-    "@ai-orch/security":     "workspace:*",
     "@vitest/coverage-v8": "^1.6.0",
     "typescript": "^5.4.0",
     "vitest":     "^1.6.0"

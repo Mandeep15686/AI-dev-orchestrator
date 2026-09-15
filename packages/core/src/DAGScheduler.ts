@@ -7,7 +7,7 @@
 import type { Task, TaskId } from '@ai-orch/protocol';
 import type { TaskDAG }       from './TaskPlanner.js';
 import type { TypedEventBus } from './EventBus.js';
-import type { GitEngine }     from '../git/GitEngine.js';
+import type { GitEngine }     from '@ai-orch/git';
 
 export interface SchedulerTask {
   task:      Task;

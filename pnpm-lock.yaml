@@ -156,22 +156,37 @@ importers:
 
   packages/core:
     dependencies:
+      '@ai-orch/agent-claude':
+        specifier: workspace:*
+        version: link:../agents/claude
+      '@ai-orch/agent-codex':
+        specifier: workspace:*
+        version: link:../agents/codex
+      '@ai-orch/agent-gemini':
+        specifier: workspace:*
+        version: link:../agents/gemini
+      '@ai-orch/agent-shared':
+        specifier: workspace:*
+        version: link:../agents/shared
+      '@ai-orch/codegraph':
+        specifier: workspace:*
+        version: link:../codegraph
+      '@ai-orch/git':
+        specifier: workspace:*
+        version: link:../git
       '@ai-orch/protocol':
         specifier: workspace:*
         version: link:../protocol
+      '@ai-orch/security':
+        specifier: workspace:*
+        version: link:../security
+      '@ai-orch/storage':
+        specifier: workspace:*
+        version: link:../storage
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.4
     devDependencies:
-      '@ai-orch/agent-shared':
-        specifier: workspace:*
-        version: link:../agents/shared
-      '@ai-orch/git':
-        specifier: workspace:*
-        version: link:../git
-      '@ai-orch/security':
-        specifier: workspace:*
-        version: link:../security
       '@vitest/coverage-v8':
         specifier: ^1.6.0
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.43))

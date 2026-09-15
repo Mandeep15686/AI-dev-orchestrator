@@ -5,8 +5,8 @@
 // ═══════════════════════════════════════════════════════════════
 
 import type { AgentId, Task, TaskType } from '@ai-orch/protocol';
-import type { AgentAdapter } from '../agents/shared/src/AgentAdapter.js';
-import type { Database } from '../storage/Database.js';
+import type { AgentAdapter } from '@ai-orch/agent-shared';
+import type { Database } from '@ai-orch/storage';
 
 export interface AgentScore {
   agentId:   AgentId;

@@ -1,5 +1,5 @@
 // packages/core/src/__tests__/TaskPlanner.test.ts
-import { describe, it, expect } from 'vitest';
+import { beforeEach, describe, it, expect } from 'vitest';
 import { TaskPlanner } from '../TaskPlanner.js';
 
 describe('TaskPlanner', () => {

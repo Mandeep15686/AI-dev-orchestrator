@@ -8,9 +8,9 @@ import type {
   Task, AgentId, ContextPackage, ProjectMeta, GitContext,
   CodeGraphResult, HandoffSummary, VerificationResult, AgentCapabilities,
 } from '@ai-orch/protocol';
-import type { Database } from '../storage/Database.js';
-import type { GitEngine }    from '../git/GitEngine.js';
-import type { CodeGraphProxy } from '../codegraph/CodeGraphProxy.js';
+import type { Database } from '@ai-orch/storage';
+import type { GitEngine } from '@ai-orch/git';
+import type { CodeGraphProxy } from '@ai-orch/codegraph';
 
 // Simple tokenizer estimate (~4 chars per token)
 function estimateTokens(text: string): number {

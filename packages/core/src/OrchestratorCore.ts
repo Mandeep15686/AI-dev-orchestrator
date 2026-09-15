@@ -19,14 +19,14 @@ import { VerificationEngine }  from './VerificationEngine.js';
 import { FailureRecovery }     from './FailureRecovery.js';
 import { DAGScheduler }        from './DAGScheduler.js';
 
-import { Database }            from '../storage/Database.js';
-import { GitEngine }           from '../git/GitEngine.js';
-import { CodeGraphProxy }      from '../codegraph/CodeGraphProxy.js';
-import { PermissionManager }   from '../security/PermissionManager.js';
+import { Database }            from '@ai-orch/storage';
+import { GitEngine }           from '@ai-orch/git';
+import { CodeGraphProxy }      from '@ai-orch/codegraph';
+import { PermissionManager }   from '@ai-orch/security';
 
-import { ClaudeAdapter }   from '../agents/claude/src/ClaudeAdapter.js';
-import { CodexAdapter }    from '../agents/codex/src/CodexAdapter.js';
-import { GeminiAdapter }   from '../agents/gemini/src/GeminiAdapter.js';
+import { ClaudeAdapter }   from '@ai-orch/agent-claude';
+import { CodexAdapter }    from '@ai-orch/agent-codex';
+import { GeminiAdapter }   from '@ai-orch/agent-gemini';
 
 export interface OrchestratorConfig {
   dbPath:          string;
