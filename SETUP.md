@@ -17,7 +17,7 @@ Node 20 is intentionally used by CI. Using newer Node versions can require local
 ## Clone and install
 
 ```bash
-git clone https://github.com/Mandeep15686/AI-dev-orchestrator-complete.git ai-dev-orchestrator
+git clone https://github.com/Mandeep15686/AI-dev-orchestrator.git ai-dev-orchestrator
 cd ai-dev-orchestrator
 
 corepack enable

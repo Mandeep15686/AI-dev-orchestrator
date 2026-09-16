@@ -1,6 +1,6 @@
 # AI Dev Orchestrator
 
-[![CI](https://github.com/Mandeep15686/AI-dev-orchestrator-complete/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Mandeep15686/AI-dev-orchestrator-complete/actions/workflows/ci.yml)
+[![CI](https://github.com/Mandeep15686/AI-dev-orchestrator/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Mandeep15686/AI-dev-orchestrator/actions/workflows/ci.yml)
 
 AI Dev Orchestrator is a local-first desktop application for coordinating coding work across Codex, Claude Code, Cursor, and Gemini. It plans work as a task DAG, selects an available adapter, keeps Git checkpoints, and records orchestration state locally.
 
@@ -35,7 +35,7 @@ packages/{git,storage,
 Prerequisites: Node.js 20 LTS, Corepack, Rust stable with Cargo, and Git. See [SETUP.md](SETUP.md) for Windows, macOS, and Linux instructions.
 
 ```bash
-git clone https://github.com/Mandeep15686/AI-dev-orchestrator-complete.git ai-dev-orchestrator
+git clone https://github.com/Mandeep15686/AI-dev-orchestrator.git ai-dev-orchestrator
 cd ai-dev-orchestrator
 
 corepack enable
