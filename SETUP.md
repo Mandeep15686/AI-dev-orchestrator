@@ -1,255 +1,190 @@
 # Setup Guide
 
-Complete instructions for getting AI Dev Orchestrator running locally.
+This guide sets up AI Dev Orchestrator for development and native desktop builds. Commands below are run from the repository root unless stated otherwise.
 
----
+## Requirements
 
-## System Requirements
+| Tool | Recommended version | Why it is needed |
+|---|---:|---|
+| Node.js | 20 LTS | Matches the GitHub Actions runtime and native dependency support |
+| Corepack | Bundled with Node 20 | Activates the repository-pinned pnpm release |
+| pnpm | 9.15.9 | Workspace package manager, pinned in `package.json` |
+| Rust and Cargo | Stable | Builds the Tauri native application |
+| Git | Current | Checkpoints, worktrees, and repository operations |
 
-| Requirement | Version | Notes |
-|---|---|---|
-| Node.js | ≥ 20.0.0 | Use `nvm` or `fnm` to manage |
-| pnpm | ≥ 9.0.0 | `npm install -g pnpm` |
-| Rust + Cargo | stable | [rustup.rs](https://rustup.rs/) |
-| Git | any | Must be on PATH |
-| macOS / Linux | — | Windows via WSL2 is supported |
+Node 20 is intentionally used by CI. Using newer Node versions can require local recompilation of native modules such as `better-sqlite3`.
 
----
-
-## Step 1 — Clone and install
+## Clone and install
 
 ```bash
-git clone https://github.com/your-org/ai-dev-orchestrator
+git clone https://github.com/Mandeep15686/AI-dev-orchestrator-complete.git ai-dev-orchestrator
 cd ai-dev-orchestrator
-pnpm install
+
+corepack enable
+corepack prepare pnpm@9.15.9 --activate
+pnpm install --frozen-lockfile
 ```
 
-This installs all workspace packages in a single pass.
+Use `pnpm install` without `--frozen-lockfile` only when you intentionally change dependencies and will update `pnpm-lock.yaml`.
 
----
+## Platform prerequisites
 
-## Step 2 — Install system dependencies
+### Windows (native)
+
+Native Windows is the recommended environment for building the Windows desktop application.
+
+1. Install Node.js 20 LTS, Git, and Rust stable.
+2. Install Visual Studio Build Tools with the **Desktop development with C++** workload and the MSVC build tools.
+3. Ensure Microsoft Edge WebView2 Runtime is installed (it is included with current Windows installations).
+4. Open a new PowerShell window after installing Rust so `cargo --version` succeeds.
+
+WSL can build TypeScript packages, but it does not produce a normal native Windows Tauri application without additional GUI and cross-compilation setup.
 
 ### macOS
+
 ```bash
-# Xcode Command Line Tools (needed for Tauri/native builds)
 xcode-select --install
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### Ubuntu / Debian
+Restart the terminal after installing Rust, then verify `cargo --version`.
+
+### Ubuntu or Debian
+
 ```bash
 sudo apt-get update
 sudo apt-get install -y \
+  build-essential \
   libwebkit2gtk-4.1-dev \
   libappindicator3-dev \
   librsvg2-dev \
-  patchelf \
-  build-essential \
   libssl-dev \
+  patchelf \
   pkg-config
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### Windows (WSL2)
-Use Ubuntu in WSL2 and follow the Ubuntu instructions above.
+Restart the shell after Rust installation, or load Cargo’s environment before continuing.
 
----
-
-## Step 3 — Build TypeScript packages
+## Verify the checkout
 
 ```bash
+node --version
+pnpm --version
+cargo --version
+
+pnpm typecheck
+pnpm test
 pnpm build
 ```
 
-This runs `tsc` in each workspace package in dependency order via Turborepo.
-
----
-
-## Step 4 — Run tests
+Run a focused test suite when iterating:
 
 ```bash
-# All tests
-pnpm test
-
-# Watch mode for active development
-pnpm test:watch
-
-# Specific package
-pnpm --filter @ai-orch/core test
-pnpm --filter @ai-orch/security test
+pnpm test:core
+pnpm test:security
+pnpm --filter @ai-orch/core exec vitest run src/__tests__/AgentRouter.test.ts
 ```
 
----
+## Run the desktop app
 
-## Step 5 — Connect AI agents
-
-Launch the app (Step 6) then go to the **Agents** tab.
-
-For each agent:
-1. Paste your API key
-2. Click **Save** (stored in OS keychain)
-3. Click **Detect** to verify
-
-### Getting API keys
-
-| Agent | URL |
-|---|---|
-| Claude Code | [console.anthropic.com](https://console.anthropic.com) |
-| OpenAI Codex | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
-| Gemini | [ai.google.dev](https://ai.google.dev) |
-| Cursor | [cursor.sh/settings](https://cursor.sh/settings) |
-
-You also need the agent CLI installed:
-```bash
-npm install -g @anthropic-ai/claude-code   # Claude Code
-npm install -g openai-codex                # Codex (if available)
-# Cursor: download from cursor.sh
-```
-
----
-
-## Step 6 — Run the app
-
-### Development mode
 ```bash
 pnpm tauri
 ```
 
-This starts the Vite dev server + Tauri simultaneously with hot-reload.
+This command invokes Tauri from the repository root, where it discovers `src-tauri/tauri.conf.json`. Tauri starts the configured development command and opens the desktop app with hot reload.
 
-### Build for distribution
+For frontend-only work:
+
+```bash
+pnpm --dir apps/desktop dev
+```
+
+## Build a distributable
+
 ```bash
 pnpm tauri:build
 ```
 
-Outputs to `src-tauri/target/release/bundle/`.
+The current platform’s packages are created under `src-tauri/target/release/bundle/`. The bundle configuration includes the PNG, Windows ICO, and macOS ICNS assets in `src-tauri/icons/`; keep those files when changing application branding.
 
----
+GitHub Actions builds bundles independently on Ubuntu, macOS, and Windows. Local builds produce artifacts only for the host platform unless a cross-compilation toolchain is configured.
 
-## Step 7 — Import your first project
+## Configure agents
 
-1. Open the app → **Dashboard**
-2. Click **Import Project** in the top-right
-3. Paste the path to a local Git repository
-4. Click **Import**
+1. Start the desktop app.
+2. Open **Agents**.
+3. Enter the provider credential where required, save it, then select **Detect**.
+4. Ensure the corresponding CLI is installed and authenticated when that adapter uses a CLI.
 
-The orchestrator creates a `.ai-orchestrator/` directory in your project containing:
-
-```
-.ai-orchestrator/
-├── project.json        ← project metadata
-├── state.json          ← current orchestration state
-├── task.md             ← edit this to describe your task
-├── decisions.md        ← auto-appended architectural decisions
-├── handoffs/           ← handoff JSON per agent session
-├── runs/               ← raw agent output logs
-└── agents/             ← per-agent run history
-```
-
----
-
-## Development Workflow
-
-### Package dependency graph
-
-```
-protocol  ←  core  ←  agents/*
-          ←  git
-          ←  storage
-          ←  security
-          ←  codegraph
-```
-
-`protocol` has zero dependencies — all types live there.
-
-### Adding a new subsystem
-
-1. Create `packages/my-module/`
-2. Add `package.json` with `"name": "@ai-orch/my-module"`
-3. Add `tsconfig.json` extending `../../tsconfig.json`
-4. Import it in `packages/core/src/OrchestratorCore.ts`
-5. Run `pnpm build` to pick it up
-
-### Adding a new agent
-
-See [packages/agents/README.md](packages/agents/README.md).
-
-### Running a single test file
+The application stores credentials in the OS keychain. Environment variables are useful only for development or direct adapter testing:
 
 ```bash
-pnpm --filter @ai-orch/core exec vitest run src/__tests__/AgentRouter.test.ts
+ANTHROPIC_API_KEY=...
+OPENAI_API_KEY=...
+GEMINI_API_KEY=...
+CURSOR_API_KEY=...
 ```
 
----
+Never commit real credentials, `.env` files containing credentials, or generated application databases.
 
-## Environment Variables
+## CI workflow
 
-These are only used during **development**. In production, credentials are in the OS keychain.
+The workflow in `.github/workflows/ci.yml` uses the same installation contract as local setup:
 
 ```bash
-# Optional — for testing the sidecar directly
-ORCH_DB_PATH=/tmp/test-orch.db
-
-# Only if running agents outside the UI
-ANTHROPIC_API_KEY=sk-ant-...
-OPENAI_API_KEY=sk-...
-GEMINI_API_KEY=AIza...
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm tauri build
 ```
 
----
+It also runs `cargo clippy -- -D warnings` and a Rust debug build. If CI reports an icon error, verify that all files in `src-tauri/icons/` are tracked and that `src-tauri/tauri.conf.json` lists the complete icon set.
 
 ## Troubleshooting
 
-### `tauri dev` fails with "webkit not found"
-Install the Linux system dependencies from Step 2.
+### `pnpm` uses the wrong version
 
-### `pnpm install` fails with workspace errors
-Ensure Node.js ≥ 20: `node --version`
+Run the Corepack commands from the installation step again:
 
-### Agent shows "Not detected"
-1. Ensure the CLI is on your PATH: `which claude`
-2. In the app → Agents tab → click **⟳ Detect**
-3. Check credentials are saved in Settings
-
-### Tests fail with import errors
-Run `pnpm build` first — some tests import from compiled outputs.
-
-### SQLite errors on first run
-The database is created automatically at `$APP_DATA/orchestrator.db`.
-Delete it to start fresh: `rm -rf ~/.local/share/ai-dev-orchestrator/`
-
----
-
-## Project Layout
-
+```bash
+corepack enable
+corepack prepare pnpm@9.15.9 --activate
 ```
-ai-dev-orchestrator/
-├── .github/workflows/     ← CI (typecheck + test + Tauri build)
-├── src-tauri/             ← Rust: process mgmt, git, keychain, SQLite
-│   └── src/
-│       ├── lib.rs         ← Tauri app bootstrap + command registration
-│       ├── commands/      ← Tauri command handlers (git, fs, process, keychain, db)
-│       ├── database.rs    ← SQLite init + schema
-│       └── ipc.rs         ← Node.js sidecar JSON-RPC bridge
-├── packages/
-│   ├── protocol/          ← All shared TypeScript types + event catalog
-│   ├── core/              ← Orchestration subsystems (10 classes)
-│   │   └── src/__tests__/ ← Unit + integration tests (vitest)
-│   ├── agents/
-│   │   ├── shared/        ← AgentAdapter interface + BaseAgentAdapter
-│   │   ├── claude/        ← Claude Code adapter
-│   │   ├── codex/         ← OpenAI Codex adapter
-│   │   ├── cursor/        ← Cursor adapter (ACP)
-│   │   └── gemini/        ← Gemini REST adapter
-│   ├── git/               ← GitEngine (wraps git CLI)
-│   ├── storage/           ← Database.ts (better-sqlite3) + migrations
-│   ├── security/          ← PermissionManager
-│   ├── codegraph/         ← CodeGraphProxy (MCP wrapper + grep fallback)
-│   └── testing/           ← VerificationEngine stub (logic is in core)
-└── apps/
-    └── desktop/           ← React 18 + Tauri UI
-        └── src/
-            ├── pages/     ← Dashboard, WorkflowEditor, AgentLogs, etc.
-            ├── components/ ← Sidebar, PermissionDialog, etc.
-            ├── store/     ← Zustand stores
-            └── lib/       ← Tauri typed bindings
+
+### `better-sqlite3` fails to install
+
+Confirm that the active Node version is 20. On Windows, also install the Visual Studio C++ build tools before retrying the install.
+
+### `cargo` is not recognized
+
+Install Rust with `rustup`, restart the terminal, and verify `cargo --version`. On Windows, confirm that `%USERPROFILE%\.cargo\bin` is on `PATH`.
+
+### Linux Tauri build fails due to WebKit or AppImage dependencies
+
+Install the Ubuntu/Debian packages listed above. Tauri’s AppImage packaging needs `librsvg2-dev` and `patchelf` in addition to the WebKit packages.
+
+### Tauri says it cannot find a project configuration
+
+Run `pnpm tauri` or `pnpm tauri:build` from the repository root. Running the Tauri CLI directly inside `apps/desktop/` does not discover `src-tauri/tauri.conf.json`.
+
+### An agent is not detected
+
+Confirm that its CLI is on `PATH`, that its provider login is complete, and then use **Detect** again from the app’s Agents page.
+
+## Project layout
+
+```text
+src-tauri/                 Rust application, capabilities, bundle config, and icons
+apps/desktop/              React and Vite desktop frontend
+packages/core/             Orchestration engine and tests
+packages/agents/           Adapter contract and provider adapters
+packages/protocol/         Shared TypeScript types
+packages/storage/          SQLite persistence
+packages/security/         Command permission checks
+packages/git/              Git and worktree operations
+packages/codegraph/        Code-context query support
+packages/testing/          Test-related workspace package
 ```

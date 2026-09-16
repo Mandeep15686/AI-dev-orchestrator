@@ -1,155 +1,101 @@
 # AI Dev Orchestrator
 
-A local-first, multi-agent software development operating layer that routes work across **Codex, Claude Code, Cursor, and Gemini** — preserving context, checkpointing state with Git, and verifying every change before the next agent continues.
+[![CI](https://github.com/Mandeep15686/AI-dev-orchestrator-complete/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Mandeep15686/AI-dev-orchestrator-complete/actions/workflows/ci.yml)
 
----
+AI Dev Orchestrator is a local-first desktop application for coordinating coding work across Codex, Claude Code, Cursor, and Gemini. It plans work as a task DAG, selects an available adapter, keeps Git checkpoints, and records orchestration state locally.
 
-## Architecture at a Glance
+## Architecture
 
-```
-UI (Tauri/React) → IPC Bridge → Orchestration Core (TypeScript)
-                                       ↓
-                              Agent Adapter Layer
-                        ┌─────┬──────┬───────┬──────┐
-                      Codex  Claude  Cursor  Gemini
-                        └─────┴──────┴───────┴──────┘
-                                       ↓
-                          Git Repository (source of truth)
-                          SQLite (orchestration metadata)
-                          CodeGraph (local AST index)
+```text
+Tauri + React desktop UI
+          │
+          ▼
+TypeScript orchestration core ── Agent adapters ── Codex / Claude / Cursor / Gemini
+          │
+          ├── Git worktrees and checkpoints
+          ├── SQLite orchestration metadata
+          └── CodeGraph context queries
 ```
 
-## Monorepo Structure
+## Repository layout
 
-```
-ai-dev-orchestrator/
-├── src-tauri/              # Rust: process mgmt, git, keychain, SQLite
-├── packages/
-│   ├── protocol/           # Shared TypeScript types + event catalog
-│   ├── core/               # Orchestration logic (all 10 subsystems)
-│   ├── agents/
-│   │   ├── shared/         # AgentAdapter interface + BaseAgentAdapter
-│   │   ├── claude/         # Claude Code adapter (CLI + SDK)
-│   │   ├── codex/          # OpenAI Codex adapter (CLI + ACP)
-│   │   ├── cursor/         # Cursor adapter (CLI + ACP)
-│   │   └── gemini/         # Gemini adapter (REST API)
-│   ├── git/                # GitEngine (TypeScript wrapper)
-│   ├── storage/            # Database (SQLite via better-sqlite3)
-│   ├── security/           # PermissionManager
-│   ├── codegraph/          # CodeGraphProxy (MCP wrapper)
-│   └── testing/            # VerificationEngine
-└── apps/
-    └── desktop/            # React + Tauri UI
+```text
+src-tauri/                 Rust Tauri application, commands, database, and icons
+apps/desktop/              React desktop interface
+packages/protocol/         Shared TypeScript types and event catalog
+packages/core/             Planning, routing, scheduling, handoffs, and recovery
+packages/agents/           Shared adapter contract and agent implementations
+packages/{git,storage,
+  security,codegraph}/     Supporting services
+.github/workflows/ci.yml   TypeScript, Rust, and cross-platform bundle checks
 ```
 
-## Key Subsystems
+## Quick start
 
-| Subsystem | File | Responsibility |
-|---|---|---|
-| OrchestratorCore | `core/OrchestratorCore.ts` | Main loop — coordinates all subsystems |
-| TaskPlanner | `core/TaskPlanner.ts` | Decomposes goals → typed Task DAG |
-| AgentRouter | `core/AgentRouter.ts` | Weighted scoring → selects best agent |
-| ContextEngine | `core/ContextEngine.ts` | 92% token reduction via smart compression |
-| HandoffEngine | `core/HandoffEngine.ts` | Distils sessions → structured HandoffJSON |
-| DAGScheduler | `core/DAGScheduler.ts` | Parallel execution with Git worktrees |
-| VerificationEngine | `core/VerificationEngine.ts` | build → lint → test gates |
-| FailureRecovery | `core/FailureRecovery.ts` | Maps StopReason → RecoveryStrategy |
-| EventBus | `core/EventBus.ts` | Typed pub/sub — decouples all subsystems |
-| PermissionManager | `security/PermissionManager.ts` | Command allowlist + approval dialogs |
+Prerequisites: Node.js 20 LTS, Corepack, Rust stable with Cargo, and Git. See [SETUP.md](SETUP.md) for Windows, macOS, and Linux instructions.
 
-## Quick Start
-
-### Prerequisites
-- Node.js ≥ 20
-- Rust + Cargo (stable)
-- pnpm ≥ 9
-
-### Install
 ```bash
-git clone https://github.com/your-org/ai-dev-orchestrator
+git clone https://github.com/Mandeep15686/AI-dev-orchestrator-complete.git ai-dev-orchestrator
 cd ai-dev-orchestrator
-pnpm install
+
+corepack enable
+corepack prepare pnpm@9.15.9 --activate
+pnpm install --frozen-lockfile
+
+pnpm typecheck
+pnpm test
 ```
 
-### Development
+Start the desktop app from the repository root:
+
 ```bash
-# Start the Tauri app (dev mode)
 pnpm tauri
-
-# Or run just the UI
-cd apps/desktop && pnpm dev
-
-# Build all packages
-pnpm build
 ```
 
-### Connect Agents
-1. Open the app → **Agents** tab
-2. For each agent: paste API key → Save → Detect
-3. Keys are stored in your OS keychain (never on disk)
+Build a distributable for the current operating system:
 
-### Run a Goal
-1. Open **Dashboard**
-2. Type your goal: *"Build an auth system with JWT and a React login page"*
-3. Click **▶ Start**
-4. The orchestrator decomposes it, selects agents, and runs the pipeline
-
-## Handoff Protocol
-
-After each agent session, the HandoffEngine produces:
-
-```json
-{
-  "version": "1.0",
-  "agent": "codex",
-  "gitCommit": "3a8f21d",
-  "exitReason": "COMPLETED",
-  "completed": ["User model", "DB migration", "bcrypt hashing"],
-  "remaining": [],
-  "filesModified": ["src/models/user.ts", "src/db/migrations/001.sql"],
-  "tests": { "passed": 12, "failed": 0 },
-  "decisions": ["Used bcrypt cost factor 12"],
-  "knownIssues": []
-}
+```bash
+pnpm tauri:build
 ```
 
-## Security Model
+Build outputs are written under `src-tauri/target/release/bundle/`.
 
-- **OS Keychain** — All API keys (never SQLite or .env files)
-- **Scoped filesystem** — Agents limited to project directory
-- **Command allowlist** — Per-agent, per-task-type
-- **Approval dialogs** — `git push`, `rm -rf`, and any high-risk command
-- **Hardcoded blocklist** — `sudo`, `shutdown`, `fdisk` — never executed
+## Everyday commands
 
-## Adding a New Agent
+| Command | Purpose |
+|---|---|
+| `pnpm build` | Build all workspace packages in dependency order |
+| `pnpm typecheck` | Run TypeScript type checks across the workspace |
+| `pnpm test` | Run all workspace tests |
+| `pnpm test:core` | Run the core package tests |
+| `pnpm test:security` | Run the security package tests |
+| `pnpm tauri` | Start Vite and the Tauri desktop application |
+| `pnpm tauri:build` | Build and bundle the desktop application |
 
-```typescript
-// 1. Implement the interface
-export class MyAgentAdapter extends BaseAgentAdapter {
-  readonly id = 'myagent';
-  readonly capabilities: AgentCapabilities = { ... };
-  async detect() { ... }
-  async startSession(task, ctx, opts) { ... }
-  async *streamEvents(session) { ... }
-  async waitForStop(session) { ... }
-  async stop(session) { ... }
-}
+## Agent credentials
 
-// 2. Register in OrchestratorCore.ts
-this.router.registerAdapter(new MyAgentAdapter());
-```
+Use the app’s **Agents** page to save credentials and detect available agent CLIs. Credentials are stored through the operating system keychain; they are not written to the project database or committed to Git. Each provider may also require its own authenticated CLI or account session.
 
-## Technologies
+## Security model
 
-- **Tauri 2** — Desktop shell (Rust + WebView)
-- **React 18** — UI
-- **TypeScript** — Orchestration logic + all adapters
-- **Rust** — Process management, Git, OS keychain, SQLite commands
-- **SQLite** — Orchestration metadata (better-sqlite3)
-- **Git / libgit2** — Primary code state store + worktrees
-- **CodeGraph** — Local AST-derived code intelligence
-- **Zustand** — UI state management
-- **ACP** — Agent Client Protocol (Cursor, Codex)
+- Agent commands are checked by the permission manager before execution.
+- Risky operations can require an explicit approval.
+- Git checkpoints and worktrees isolate and preserve changes during orchestration.
+- Local SQLite stores orchestration metadata; OS keychain storage holds credentials.
+
+## Continuous integration
+
+GitHub Actions runs on pushes to `main` and `dev`, and on pull requests to `main`. The workflow uses Node.js 20 and the repository-pinned pnpm 9.15.9, then runs:
+
+1. Type checking and tests on Ubuntu.
+2. Rust build and Clippy with warnings treated as errors on Ubuntu.
+3. Tauri bundles on Ubuntu, macOS, and Windows.
+
+The bundle jobs publish the generated artifacts from `src-tauri/target/release/bundle/`.
+
+## Extending the project
+
+To add an adapter, implement `AgentAdapter` (normally by extending `BaseAgentAdapter`), export it from a workspace package, and register it in `OrchestratorCore`. The adapter authoring guide is in [packages/agents/README.md](packages/agents/README.md).
 
 ## License
 
